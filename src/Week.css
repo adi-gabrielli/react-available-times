@@ -11,6 +11,10 @@
   align-items: flex-start;
 }
 
+:local(.days){
+    width: calc(100% - 10px);
+}
+
 :local(.header) {
   align-items: stretch;
 }
