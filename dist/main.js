@@ -766,7 +766,11 @@ var AvailableTimes = function (_PureComponent) {
         initialSelections = _ref$initialSelection === undefined ? [] : _ref$initialSelection,
         recurring = _ref.recurring,
         timeZone = _ref.timeZone,
-        weekStartsOn = _ref.weekStartsOn;
+        weekStartsOn = _ref.weekStartsOn,
+        scrollbarProps_style = _ref.scrollbarProps_style,
+        scrollbarProps_renderView = _ref.scrollbarProps_renderView,
+        scrollbarProps_renderTrackVertical = _ref.scrollbarProps_renderTrackVertical,
+        scrollbarProps_renderThumbVertical = _ref.scrollbarProps_renderThumbVertical;
 
     _classCallCheck(this, AvailableTimes);
 
@@ -994,7 +998,11 @@ var AvailableTimes = function (_PureComponent) {
           recurring = _props4.recurring,
           touchToDeleteSelection = _props4.touchToDeleteSelection,
           availableDays = _props4.availableDays,
-          availableHourRange = _props4.availableHourRange;
+          availableHourRange = _props4.availableHourRange,
+          scrollbarProps_style = _props4.scrollbarProps_style,
+          scrollbarProps_renderView = _props4.scrollbarProps_renderView,
+          scrollbarProps_renderTrackVertical = _props4.scrollbarProps_renderTrackVertical,
+          scrollbarProps_renderThumbVertical = _props4.scrollbarProps_renderThumbVertical;
       var _state = this.state,
           availableWidth = _state.availableWidth,
           currentWeekIndex = _state.currentWeekIndex,
@@ -1091,7 +1099,11 @@ var AvailableTimes = function (_PureComponent) {
                   recurring: recurring,
                   touchToDeleteSelection: touchToDeleteSelection,
                   availableDays: availableDays,
-                  availableHourRange: availableHourRange
+                  availableHourRange: availableHourRange,
+                  scrollbarProps_style: scrollbarProps_style,
+                  scrollbarProps_renderView: scrollbarProps_renderView,
+                  scrollbarProps_renderTrackVertical: scrollbarProps_renderTrackVertical,
+                  scrollbarProps_renderThumbVertical: scrollbarProps_renderThumbVertical
                 });
               })
             )
@@ -2626,6 +2638,8 @@ var _momentTimezone = __webpack_require__(0);
 
 var _momentTimezone2 = _interopRequireDefault(_momentTimezone);
 
+var _reactCustomScrollbars = __webpack_require__(46);
+
 var _Constants = __webpack_require__(1);
 
 var _Validators = __webpack_require__(6);
@@ -2867,46 +2881,55 @@ var Week = function (_PureComponent) {
           })
         ),
         _react2.default.createElement(
-          'div',
+          _reactCustomScrollbars.Scrollbars,
           {
-            className: _Week2.default.daysWrapper,
-            ref: function ref(element) {
-              if (!element || _this3.alreadyScrolled) {
-                return;
-              }
-              _this3.alreadyScrolled = true;
-              // eslint-disable-next-line no-param-reassign
-              element.scrollTop = _Constants.HOUR_IN_PIXELS * 6.5;
-            }
+            style: this.props.scrollbarProps_style,
+            renderView: this.props.scrollbarProps_renderView,
+            renderTrackVertical: this.props.scrollbarProps_renderTrackVertical,
+            renderThumbVertical: this.props.scrollbarProps_renderThumbVertical
           },
           _react2.default.createElement(
             'div',
-            { className: _Week2.default.lines },
-            this.renderLines()
-          ),
-          _react2.default.createElement(
-            'div',
             {
-              className: _Week2.default.days,
-              ref: this.handleDaysRef
+              className: _Week2.default.daysWrapper,
+              ref: function ref(element) {
+                if (!element || _this3.alreadyScrolled) {
+                  return;
+                }
+                _this3.alreadyScrolled = true;
+                // eslint-disable-next-line no-param-reassign
+                element.scrollTop = _Constants.HOUR_IN_PIXELS * 6.5;
+              }
             },
-            _react2.default.createElement(_Ruler2.default, { timeConvention: timeConvention }),
-            filteredDays.map(function (day, i) {
-              return _react2.default.createElement(_Day2.default, {
-                available: day.available,
-                availableWidth: (availableWidth - _Constants.RULER_WIDTH_IN_PIXELS) / 7,
-                timeConvention: timeConvention,
-                timeZone: timeZone,
-                index: i,
-                key: day.date,
-                date: day.date,
-                events: dayEvents[i],
-                initialSelections: daySelections[i],
-                onChange: _this3.handleDayChange,
-                hourLimits: _this3.generateHourLimits(),
-                touchToDeleteSelection: touchToDeleteSelection
-              });
-            })
+            _react2.default.createElement(
+              'div',
+              { className: _Week2.default.lines },
+              this.renderLines()
+            ),
+            _react2.default.createElement(
+              'div',
+              {
+                className: _Week2.default.days,
+                ref: this.handleDaysRef
+              },
+              _react2.default.createElement(_Ruler2.default, { timeConvention: timeConvention }),
+              filteredDays.map(function (day, i) {
+                return _react2.default.createElement(_Day2.default, {
+                  available: day.available,
+                  availableWidth: (availableWidth - _Constants.RULER_WIDTH_IN_PIXELS) / 7,
+                  timeConvention: timeConvention,
+                  timeZone: timeZone,
+                  index: i,
+                  key: day.date,
+                  date: day.date,
+                  events: dayEvents[i],
+                  initialSelections: daySelections[i],
+                  onChange: _this3.handleDayChange,
+                  hourLimits: _this3.generateHourLimits(),
+                  touchToDeleteSelection: touchToDeleteSelection
+                });
+              })
+            )
           )
         )
       );
@@ -3797,6 +3820,12 @@ if(false) {
 /***/ (function(module, exports) {
 
 module.exports = require("moment");
+
+/***/ }),
+/* 46 */
+/***/ (function(module, exports) {
+
+module.exports = require("react-custom-scrollbars");
 
 /***/ })
 /******/ ]);
