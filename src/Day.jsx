@@ -228,6 +228,7 @@ export default class Day extends PureComponent {
       timeZone,
       touchToDeleteSelection,
       hourLimits,
+      appointmentMode,
     } = this.props;
 
     const { selections, index } = this.state;
@@ -350,5 +351,6 @@ Day.propTypes = {
   })),
   onChange: PropTypes.func.isRequired,
   touchToDeleteSelection: PropTypes.bool,
+  appointmentMode: PropTypes.bool,
 };
 

@@ -227,7 +227,8 @@ export default class AvailableTimes extends PureComponent {
       scrollbarProps_style,
       scrollbarProps_renderView,
       scrollbarProps_renderTrackVertical,
-      scrollbarProps_renderThumbVertical
+      scrollbarProps_renderThumbVertical,
+      appointmentMode,
     } = this.props;
 
     const {
@@ -289,39 +290,40 @@ export default class AvailableTimes extends PureComponent {
           }
           <div className={styles.main}>
 
-                <Slider
-                index={currentWeekIndex}
-                onSlide={this.move}
-                disabled={recurring}
-                >
-                {weeks.map((week, i) => {
-                    if ((recurring || Math.abs(i - currentWeekIndex) > 1) && i !== 0) {
-                    return <span key={week.start} />;
-                    }
-                    return (
-                            <Week
-                                timeConvention={timeConvention}
-                                timeZone={timeZone}
-                                availableWidth={availableWidth}
-                                calendars={calendars}
-                                key={week.start}
-                                week={week}
-                                events={recurring ? [] : events}
-                                initialSelections={selections}
-                                onChange={this.handleWeekChange}
-                                height={height}
-                                recurring={recurring}
-                                touchToDeleteSelection={touchToDeleteSelection}
-                                availableDays={availableDays}
-                                availableHourRange={availableHourRange}
-                                scrollbarProps_style={scrollbarProps_style}
-                                scrollbarProps_renderView={scrollbarProps_renderView}
-                                scrollbarProps_renderTrackVertical={scrollbarProps_renderTrackVertical}
-                                scrollbarProps_renderThumbVertical={scrollbarProps_renderThumbVertical}
-                            />
-                    );
-                })}
-                </Slider>
+            <Slider
+              index={currentWeekIndex}
+              onSlide={this.move}
+              disabled={recurring}
+            >
+              {weeks.map((week, i) => {
+                if ((recurring || Math.abs(i - currentWeekIndex) > 1) && i !== 0) {
+                  return <span key={week.start} />;
+                }
+                return (
+                  <Week
+                    timeConvention={timeConvention}
+                    timeZone={timeZone}
+                    availableWidth={availableWidth}
+                    calendars={calendars}
+                    key={week.start}
+                    week={week}
+                    events={recurring ? [] : events}
+                    initialSelections={selections}
+                    onChange={this.handleWeekChange}
+                    height={height}
+                    recurring={recurring}
+                    touchToDeleteSelection={touchToDeleteSelection}
+                    availableDays={availableDays}
+                    availableHourRange={availableHourRange}
+                    scrollbarProps_style={scrollbarProps_style}
+                    scrollbarProps_renderView={scrollbarProps_renderView}
+                    scrollbarProps_renderTrackVertical={scrollbarProps_renderTrackVertical}
+                    scrollbarProps_renderThumbVertical={scrollbarProps_renderThumbVertical}
+                    appointmentMode={appointmentMode}
+                  />
+                );
+              })}
+            </Slider>
           </div>
         </div>
         <button
@@ -366,6 +368,11 @@ AvailableTimes.propTypes = {
     start: PropTypes.number,
     end: PropTypes.number,
   }).isRequired,
+  appointmentMode: PropTypes.bool,
+  scrollbarProps_style: PropTypes.string,
+  scrollbarProps_renderView: PropTypes.string,
+  scrollbarProps_renderTrackVertical: PropTypes.string,
+  scrollbarProps_renderThumbVertical: PropTypes.string,
 };
 
 AvailableTimes.defaultProps = {
@@ -374,4 +381,5 @@ AvailableTimes.defaultProps = {
   touchToDeleteSelection: 'ontouchstart' in window,
   availableDays: DAYS_IN_WEEK,
   availableHourRange: { start: 0, end: 24 },
+  appointmentMode: false,
 };

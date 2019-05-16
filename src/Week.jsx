@@ -109,14 +109,20 @@ export default class Week extends PureComponent {
   }
 
   // generate the props required for Day to block specific hours.
-  generateHourLimits() {
-    const { availableHourRange } = this.props;
-    return { top: availableHourRange.start * HOUR_IN_PIXELS, // top blocker
-      bottom: availableHourRange.end * HOUR_IN_PIXELS,
-      bottomHeight: (24 - availableHourRange.end) * HOUR_IN_PIXELS, // bottom height
-      difference: ((availableHourRange.end - availableHourRange.start) * HOUR_IN_PIXELS)
-      + (MINUTE_IN_PIXELS * 14),
-    };
+  generateHourLimits(dayIndex) {
+    const { availableHourRange, appointmentMode } = this.props;
+    let response;
+    if (appointmentMode) {
+      
+    } else {
+      response = { top: availableHourRange.start * HOUR_IN_PIXELS, // top blocker
+        bottom: availableHourRange.end * HOUR_IN_PIXELS,
+        bottomHeight: (24 - availableHourRange.end) * HOUR_IN_PIXELS, // bottom height
+        difference: ((availableHourRange.end - availableHourRange.start) * HOUR_IN_PIXELS)
+        + (MINUTE_IN_PIXELS * 14),
+      };
+    }
+    return response;
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -145,6 +151,7 @@ export default class Week extends PureComponent {
       recurring,
       touchToDeleteSelection,
       availableDays,
+      appointmentMode,
     } = this.props;
     const { dayEvents, daySelections, daysWidth, widthOfAScrollbar } = this.state;
 
@@ -179,48 +186,49 @@ export default class Week extends PureComponent {
           ))}
         </div>
         <Scrollbars
-            style = {this.props.scrollbarProps_style}
-            renderView = {this.props.scrollbarProps_renderView}
-            renderTrackVertical = {this.props.scrollbarProps_renderTrackVertical}
-            renderThumbVertical = {this.props.scrollbarProps_renderThumbVertical}
+          style={this.props.scrollbarProps_style}
+          renderView={this.props.scrollbarProps_renderView}
+          renderTrackVertical={this.props.scrollbarProps_renderTrackVertical}
+          renderThumbVertical={this.props.scrollbarProps_renderThumbVertical}
         >
-            <div
-                className={styles.daysWrapper}
-                ref={(element) => {
-                    if (!element || this.alreadyScrolled) {
-                    return;
-                    }
-                    this.alreadyScrolled = true;
-                    // eslint-disable-next-line no-param-reassign
-                    element.scrollTop = HOUR_IN_PIXELS * 6.5;
-                }}
-                >
-                <div className={styles.lines}>
-                    {this.renderLines()}
-                </div>
-                <div
-                    className={styles.days}
-                    ref={this.handleDaysRef}
-                >
-                    <Ruler timeConvention={timeConvention} />
-                    {filteredDays.map((day, i) => (
-                    <Day
-                        available={day.available}
-                        availableWidth={(availableWidth - RULER_WIDTH_IN_PIXELS) / 7}
-                        timeConvention={timeConvention}
-                        timeZone={timeZone}
-                        index={i}
-                        key={day.date}
-                        date={day.date}
-                        events={dayEvents[i]}
-                        initialSelections={daySelections[i]}
-                        onChange={this.handleDayChange}
-                        hourLimits={this.generateHourLimits()}
-                        touchToDeleteSelection={touchToDeleteSelection}
-                    />
-                    ))}
-                </div>
+          <div
+            className={styles.daysWrapper}
+            ref={(element) => {
+              if (!element || this.alreadyScrolled) {
+                return;
+              }
+              this.alreadyScrolled = true;
+              // eslint-disable-next-line no-param-reassign
+              element.scrollTop = HOUR_IN_PIXELS * 6.5;
+            }}
+          >
+            <div className={styles.lines}>
+              {this.renderLines()}
             </div>
+            <div
+              className={styles.days}
+              ref={this.handleDaysRef}
+            >
+              <Ruler timeConvention={timeConvention} />
+              {filteredDays.map((day, i) => (
+                <Day
+                  available={day.available}
+                  availableWidth={(availableWidth - RULER_WIDTH_IN_PIXELS) / 7}
+                  timeConvention={timeConvention}
+                  timeZone={timeZone}
+                  index={i}
+                  key={day.date}
+                  date={day.date}
+                  events={dayEvents[i]}
+                  initialSelections={daySelections[i]}
+                  onChange={this.handleDayChange}
+                  hourLimits={this.generateHourLimits(i)}
+                  touchToDeleteSelection={touchToDeleteSelection}
+                  appointmentMode={appointmentMode}
+                />
+              ))}
+            </div>
+          </div>
         </Scrollbars>
       </div>
     );
@@ -254,4 +262,9 @@ Week.propTypes = {
     start: PropTypes.number,
     end: PropTypes.number,
   }).isRequired,
+  appointmentMode: PropTypes.bool,
+  scrollbarProps_style: PropTypes.string,
+  scrollbarProps_renderView: PropTypes.string,
+  scrollbarProps_renderTrackVertical: PropTypes.string,
+  scrollbarProps_renderThumbVertical: PropTypes.string,
 };
