@@ -161,7 +161,7 @@ class Test extends Component {
               scrollbarProps_renderView={props => <div {...props} className="calendar-scrollbar" />}
               scrollbarProps_renderTrackVertical={props => <div {...props} className="scroll-track-vertical" />}
               scrollbarProps_renderThumbVertical={props => <div {...props} className="scroll-thumb-vertical" />}
-              
+              appointmentMode={true}
             />
           </div>
         </div>

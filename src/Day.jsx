@@ -27,9 +27,7 @@ export default class Day extends PureComponent {
     this.handleSizeChangeStart = this.handleItemModification.bind(this, 'end');
     this.handleMoveStart = this.handleItemModification.bind(this, 'both');
     this.handleDelete = this.handleDelete.bind(this);
-    this.handleMouseTargetRef = (element) => {
-      this.mouseTargetRef = element;
-    };
+
   }
 
   findSelectionAt(date) {
@@ -46,8 +44,9 @@ export default class Day extends PureComponent {
     return undefined;
   }
 
-  relativeY(pageY, rounding = ROUND_TO_NEAREST_MINS) {
-    const { top } = this.mouseTargetRef.getBoundingClientRect();
+  relativeY(pageY, rounding = ROUND_TO_NEAREST_MINS, mouseTargetRef) {
+    // const { top } = this.mouseTargetRef.getBoundingClientRect();
+    const { top } = mouseTargetRef.getBoundingClientRect();
     let realY = pageY - top - (window.pageYOffset ||
       document.documentElement.scrollTop || document.body.scrollTop || 0);
     realY += this.props.hourLimits.top; // offset top blocker
@@ -71,8 +70,8 @@ export default class Day extends PureComponent {
     });
   }
 
-  handleItemModification(edge, { start, end }, { pageY, currentTarget }) {
-    const position = this.relativeY(pageY);
+  handleItemModification(edge, { start, end }, e) {
+    const position = this.relativeY(e.pageY, ROUND_TO_NEAREST_MINS, e.target);
     this.setState(({ selections }) => {
       for (let i = 0; i < selections.length; i++) {
         if (selections[i].start === start && selections[i].end === end) {
@@ -81,7 +80,7 @@ export default class Day extends PureComponent {
             index: i,
             lastKnownPosition: position,
             minLengthInMinutes: 30,
-            target: currentTarget,
+            target: e.currentTarget,
           };
         }
       }
@@ -117,7 +116,7 @@ export default class Day extends PureComponent {
 
   handleMouseDown(e) {
     const { timeZone } = this.props;
-    const position = this.relativeY(e.pageY, 60);
+    const position = this.relativeY(e.pageY, 60, e.target);
     const dateAtPosition = toDate(this.props.date, position, timeZone);
 
     if (this.findSelectionAt(dateAtPosition)) {
@@ -152,12 +151,12 @@ export default class Day extends PureComponent {
     const { hourLimits } = this.props;
     return (offsetTop + offsetHeight) >= hourLimits.bottom;
   }
-  handleMouseMove({ pageY }) {
+  handleMouseMove(e) {
     if (typeof this.state.index === 'undefined') {
       return;
     }
     const { date, timeZone } = this.props;
-    const position = this.relativeY(pageY);
+    const position = this.relativeY(e.pageY, ROUND_TO_NEAREST_MINS, e.target);
     this.setState(({ minLengthInMinutes, selections, edge, index, lastKnownPosition, target }) => {
       const selection = selections[index];
       let newMinLength = minLengthInMinutes;
@@ -241,6 +240,44 @@ export default class Day extends PureComponent {
     if (inSameDay(date, new Date(), timeZone)) {
       classes.push(styles.today);
     }
+    let draggableDivs;
+    if (appointmentMode) {
+      draggableDivs = hourLimits.map((limit, index) => (
+        <div
+          onMouseDown={this.handleMouseDown}
+          onMouseUp={this.handleMouseUp}
+          onMouseMove={this.handleMouseMove}
+          onMouseOut={this.handleMouseUp}
+          onTouchStart={this.handleTouchStart}
+          onTouchMove={this.handleTouchMove}
+          onTouchEnd={this.handleTouchEnd}
+          className={styles.mouseTarget}
+          
+          style={{
+            top: limit.top,
+            height: limit.difference,
+          }}
+        />
+        ));
+    } else {
+      draggableDivs = (
+        <div
+          onMouseDown={this.handleMouseDown}
+          onMouseUp={this.handleMouseUp}
+          onMouseMove={this.handleMouseMove}
+          onMouseOut={this.handleMouseUp}
+          onTouchStart={this.handleTouchStart}
+          onTouchMove={this.handleTouchMove}
+          onTouchEnd={this.handleTouchEnd}
+          className={styles.mouseTarget}
+          
+          style={{
+            top: hourLimits.top,
+            height: hourLimits.difference,
+          }}
+        />
+        );
+    }
 
     return (
       <div
@@ -287,21 +324,7 @@ export default class Day extends PureComponent {
           />
         ))}
         { available && (
-          <div
-            onMouseDown={this.handleMouseDown}
-            onMouseUp={this.handleMouseUp}
-            onMouseMove={this.handleMouseMove}
-            onMouseOut={this.handleMouseUp}
-            onTouchStart={this.handleTouchStart}
-            onTouchMove={this.handleTouchMove}
-            onTouchEnd={this.handleTouchEnd}
-            className={styles.mouseTarget}
-            ref={this.handleMouseTargetRef}
-            style={{
-              top: hourLimits.top,
-              height: hourLimits.difference,
-            }}
-          />
+           draggableDivs
         )}
         {selections.map(({ start, end }, i) => (
           <TimeSlot
@@ -327,12 +350,7 @@ export default class Day extends PureComponent {
 Day.propTypes = {
   available: PropTypes.bool,
   availableWidth: PropTypes.number.isRequired,
-  hourLimits: PropTypes.shape({
-    top: PropTypes.number,
-    bottom: PropTypes.number,
-    bottomHeight: PropTypes.number,
-    difference: PropTypes.number,
-  }).isRequired,
+
   timeConvention: PropTypes.oneOf(['12h', '24h']),
   timeZone: PropTypes.string.isRequired,
 

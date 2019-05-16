@@ -113,7 +113,19 @@ export default class Week extends PureComponent {
     const { availableHourRange, appointmentMode } = this.props;
     let response;
     if (appointmentMode) {
-      
+      response = this.state.dayEvents[dayIndex]
+      .filter((e, index) => ( !e.allDay))
+      .map((e, index) =>{
+        const start = new Date(e.start);
+        const end = new Date(e.end);
+        return {
+          top: start.getHours() * HOUR_IN_PIXELS, // top blocker
+          bottom: end.getHours() * HOUR_IN_PIXELS,
+          bottomHeight: (24 - end.getHours()) * HOUR_IN_PIXELS, // bottom height
+          difference: ((end.getHours() - start.getHours()) * HOUR_IN_PIXELS)
+          + (MINUTE_IN_PIXELS * 14),
+        };
+      });
     } else {
       response = { top: availableHourRange.start * HOUR_IN_PIXELS, // top blocker
         bottom: availableHourRange.end * HOUR_IN_PIXELS,
@@ -263,8 +275,4 @@ Week.propTypes = {
     end: PropTypes.number,
   }).isRequired,
   appointmentMode: PropTypes.bool,
-  scrollbarProps_style: PropTypes.string,
-  scrollbarProps_renderView: PropTypes.string,
-  scrollbarProps_renderTrackVertical: PropTypes.string,
-  scrollbarProps_renderThumbVertical: PropTypes.string,
 };

@@ -369,10 +369,6 @@ AvailableTimes.propTypes = {
     end: PropTypes.number,
   }).isRequired,
   appointmentMode: PropTypes.bool,
-  scrollbarProps_style: PropTypes.string,
-  scrollbarProps_renderView: PropTypes.string,
-  scrollbarProps_renderTrackVertical: PropTypes.string,
-  scrollbarProps_renderThumbVertical: PropTypes.string,
 };
 
 AvailableTimes.defaultProps = {
