@@ -20,7 +20,8 @@ function dateAt(dayInWeek, hours, minutes) {
   return date;
 }
 
-const TIME_ZONE = 'America/Los_Angeles';
+// const TIME_ZONE = 'America/Los_Angeles';
+const TIME_ZONE = momentTimezone.tz.guess();
 
 const calendars = [
   {

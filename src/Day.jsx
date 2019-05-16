@@ -130,6 +130,26 @@ export default class Day extends PureComponent {
       // slot is less than 30 mins
       return;
     }
+    // check if underlying event
+    const that = this;
+    const today = new Date(that.props.date);
+    today.setHours(0);
+    today.setMinutes(0);
+    today.setSeconds(1);
+
+    const hasEvent = this.props.events.find( (event, index) => {
+      const position_start = positionInDay(today, event.start, that.props.timeZone);
+      const position_end = positionInDay(today, event.end, that.props.timeZone);
+
+      if (!(position >= position_start && position < position_end)) {
+        return false;
+      } else {
+        return true;
+      }
+    });
+    if (!hasEvent) {
+      return;
+    }
     this.setState(({ selections }) => ({
       edge: 'end',
       index: selections.length,
@@ -156,8 +176,31 @@ export default class Day extends PureComponent {
     if (typeof this.state.index === 'undefined') {
       return;
     }
+
     const { date, timeZone } = this.props;
     const position = this.relativeY(pageY);
+
+    // check if underlying event
+    const that = this;
+    const today = new Date(that.props.date);
+    today.setHours(0);
+    today.setMinutes(0);
+    today.setSeconds(1);
+
+    const hasEvent = this.props.events.find( (event, index) => {
+      const position_start = positionInDay(today, event.start, that.props.timeZone);
+      const position_end = positionInDay(today, event.end, that.props.timeZone);
+
+      if (!(position >= position_start && position < position_end)) {
+        return false;
+      } else {
+        return true;
+      }
+    });
+    if (!hasEvent) {
+      return;
+    }
+
     this.setState(({ minLengthInMinutes, selections, edge, index, lastKnownPosition, target }) => {
       const selection = selections[index];
       let newMinLength = minLengthInMinutes;
@@ -195,6 +238,10 @@ export default class Day extends PureComponent {
           // Collision! Let
           return {};
         }
+
+
+        
+
         selection.end = newEnd;
       }
       return {
