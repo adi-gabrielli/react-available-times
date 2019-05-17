@@ -8,6 +8,8 @@ import inSameDay from './inSameDay';
 import positionInDay from './positionInDay';
 import styles from './Day.css';
 import toDate from './toDate';
+import underlyingEvent from './underlyingEvent';
+
 
 const ROUND_TO_NEAREST_MINS = 15;
 
@@ -130,24 +132,8 @@ export default class Day extends PureComponent {
       // slot is less than 30 mins
       return;
     }
-    // check if underlying event
-    const that = this;
-    const today = new Date(that.props.date);
-    today.setHours(0);
-    today.setMinutes(0);
-    today.setSeconds(1);
 
-    const hasEvent = this.props.events.find( (event, index) => {
-      const position_start = positionInDay(today, event.start, that.props.timeZone);
-      const position_end = positionInDay(today, event.end, that.props.timeZone);
-
-      if (!(position >= position_start && position < position_end)) {
-        return false;
-      } else {
-        return true;
-      }
-    });
-    if (!hasEvent) {
+    if (!underlyingEvent(this.props.date, position, this.props.events, this.props.timeZone)) {
       return;
     }
     this.setState(({ selections }) => ({
@@ -180,24 +166,8 @@ export default class Day extends PureComponent {
     const { date, timeZone } = this.props;
     const position = this.relativeY(pageY);
 
-    // check if underlying event
-    const that = this;
-    const today = new Date(that.props.date);
-    today.setHours(0);
-    today.setMinutes(0);
-    today.setSeconds(1);
 
-    const hasEvent = this.props.events.find( (event, index) => {
-      const position_start = positionInDay(today, event.start, that.props.timeZone);
-      const position_end = positionInDay(today, event.end, that.props.timeZone);
-
-      if (!(position >= position_start && position < position_end)) {
-        return false;
-      } else {
-        return true;
-      }
-    });
-    if (!hasEvent) {
+    if (!underlyingEvent(this.props.date, position, this.props.events, this.props.timeZone)) {
       return;
     }
 
@@ -213,6 +183,7 @@ export default class Day extends PureComponent {
         if (hasOverlap(selections, newStart, newEnd, index)) {
           return {};
         }
+
         if (this.hasReachedTop(target) && diff < 0) {
           // if has reached top blocker and it is going upwards, fix the newStart.
           newStart = selection.start;
@@ -234,14 +205,11 @@ export default class Day extends PureComponent {
           newMinLength = 30;
         }
         const newEnd = toDate(date, Math.max(minPos, position), timeZone);
+        
         if (hasOverlap(selections, selection.start, newEnd, index)) {
           // Collision! Let
           return {};
         }
-
-
-        
-
         selection.end = newEnd;
       }
       return {
