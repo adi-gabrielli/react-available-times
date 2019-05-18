@@ -227,7 +227,8 @@ export default class AvailableTimes extends PureComponent {
       scrollbarProps_style,
       scrollbarProps_renderView,
       scrollbarProps_renderTrackVertical,
-      scrollbarProps_renderThumbVertical
+      scrollbarProps_renderThumbVertical,
+      appointmentMode
     } = this.props;
 
     const {
@@ -318,6 +319,7 @@ export default class AvailableTimes extends PureComponent {
                                 scrollbarProps_renderView={scrollbarProps_renderView}
                                 scrollbarProps_renderTrackVertical={scrollbarProps_renderTrackVertical}
                                 scrollbarProps_renderThumbVertical={scrollbarProps_renderThumbVertical}
+                                appointmentMode={appointmentMode}
                             />
                     );
                 })}

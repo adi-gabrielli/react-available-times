@@ -11,7 +11,7 @@ export default function underlyingEvent(date, position, events, timeZone) {
     const positionStart = positionInDay(today, ev.start, timeZone);
     const positionEnd = positionInDay(today, ev.end, timeZone);
 
-    if (!(position >= positionStart && position < positionEnd)) {
+    if (!(position >= positionStart && position < positionEnd) || ev.allDay) {
       return false;
     } else {
       return true;

@@ -118,7 +118,7 @@ export default class Day extends PureComponent {
   }
 
   handleMouseDown(e) {
-    const { timeZone } = this.props;
+    const { timeZone, appointmentMode } = this.props;
     const position = this.relativeY(e.pageY, 60);
     const dateAtPosition = toDate(this.props.date, position, timeZone);
 
@@ -133,8 +133,10 @@ export default class Day extends PureComponent {
       return;
     }
 
-    if (!underlyingEvent(this.props.date, position, this.props.events, this.props.timeZone)) {
-      return;
+    if (appointmentMode) {
+      if (!underlyingEvent(this.props.date, position, this.props.events, this.props.timeZone)) {
+        return;
+      }
     }
     this.setState(({ selections }) => ({
       edge: 'end',
@@ -163,12 +165,13 @@ export default class Day extends PureComponent {
       return;
     }
 
-    const { date, timeZone } = this.props;
+    const { date, timeZone, appointmentMode } = this.props;
     const position = this.relativeY(pageY);
 
-
-    if (!underlyingEvent(this.props.date, position, this.props.events, this.props.timeZone)) {
-      return;
+    if (appointmentMode) {
+      if (!underlyingEvent(this.props.date, position, this.props.events, this.props.timeZone)) {
+        return;
+      }
     }
 
     this.setState(({ minLengthInMinutes, selections, edge, index, lastKnownPosition, target }) => {
@@ -180,6 +183,7 @@ export default class Day extends PureComponent {
           toDate(date, lastKnownPosition, timeZone).getTime();
         let newStart = new Date(selection.start.getTime() + diff);
         let newEnd = new Date(selection.end.getTime() + diff);
+
         if (hasOverlap(selections, newStart, newEnd, index)) {
           return {};
         }
@@ -193,6 +197,17 @@ export default class Day extends PureComponent {
           // if has reached bottom blocker and it is going downwards, fix.
           newEnd = selection.end;
         }
+        if (appointmentMode) {
+          const newStartInPixels = positionInDay(this.props.date, newStart, this.props.timeZone);
+          if (!underlyingEvent(this.props.date, newStartInPixels, this.props.events, this.props.timeZone)) {
+            return {};
+          }
+
+          const newEndInPixels = positionInDay(this.props.date, newEnd, this.props.timeZone);
+          if (!underlyingEvent(this.props.date, newEndInPixels, this.props.events, this.props.timeZone)) {
+            return {};
+          }
+        }
 
         selection.start = newStart;
         selection.end = newEnd;
@@ -205,7 +220,7 @@ export default class Day extends PureComponent {
           newMinLength = 30;
         }
         const newEnd = toDate(date, Math.max(minPos, position), timeZone);
-        
+
         if (hasOverlap(selections, selection.start, newEnd, index)) {
           // Collision! Let
           return {};
