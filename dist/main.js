@@ -209,7 +209,7 @@ var stylesInDom = {},
 	singletonElement = null,
 	singletonCounter = 0,
 	styleElementsInsertedAtTop = [],
-	fixUrls = __webpack_require__(36);
+	fixUrls = __webpack_require__(37);
 
 module.exports = function(list, options) {
 	if(typeof DEBUG !== "undefined" && DEBUG) {
@@ -486,6 +486,45 @@ module.exports = require("react");
 "use strict";
 
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = positionInDay;
+
+var _momentTimezone = __webpack_require__(0);
+
+var _momentTimezone2 = _interopRequireDefault(_momentTimezone);
+
+var _Constants = __webpack_require__(1);
+
+var _inSameDay = __webpack_require__(9);
+
+var _inSameDay2 = _interopRequireDefault(_inSameDay);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function positionInDay(withinDay, date, timeZone) {
+  if (!timeZone) {
+    throw new Error('Missing timeZone');
+  }
+  if (!(0, _inSameDay2.default)(date, withinDay, timeZone)) {
+    if (date < withinDay) {
+      return 0;
+    }
+    return 24 * _Constants.HOUR_IN_PIXELS;
+  }
+  var mom = _momentTimezone2.default.tz(date, timeZone);
+  return mom.hours() * _Constants.HOUR_IN_PIXELS + mom.minutes() * _Constants.MINUTE_IN_PIXELS;
+}
+module.exports = exports['default'];
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
 var _Constants = __webpack_require__(1);
 
 module.exports = {
@@ -498,7 +537,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -533,7 +572,7 @@ function hasOverlap(events, start, end, ignoreIndex) {
 module.exports = exports["default"];
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -552,45 +591,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function inSameDay(dateA, dateB, timeZone) {
   return _momentTimezone2.default.tz(dateA, timeZone).format('YYYYMMDD') === _momentTimezone2.default.tz(dateB, timeZone).format('YYYYMMDD');
-}
-module.exports = exports['default'];
-
-/***/ }),
-/* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = positionInDay;
-
-var _momentTimezone = __webpack_require__(0);
-
-var _momentTimezone2 = _interopRequireDefault(_momentTimezone);
-
-var _Constants = __webpack_require__(1);
-
-var _inSameDay = __webpack_require__(8);
-
-var _inSameDay2 = _interopRequireDefault(_inSameDay);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function positionInDay(withinDay, date, timeZone) {
-  if (!timeZone) {
-    throw new Error('Missing timeZone');
-  }
-  if (!(0, _inSameDay2.default)(date, withinDay, timeZone)) {
-    if (date < withinDay) {
-      return 0;
-    }
-    return 24 * _Constants.HOUR_IN_PIXELS;
-  }
-  var mom = _momentTimezone2.default.tz(date, timeZone);
-  return mom.hours() * _Constants.HOUR_IN_PIXELS + mom.minutes() * _Constants.MINUTE_IN_PIXELS;
 }
 module.exports = exports['default'];
 
@@ -684,7 +684,7 @@ var _momentTimezone2 = _interopRequireDefault(_momentTimezone);
 
 var _Constants = __webpack_require__(1);
 
-var _Validators = __webpack_require__(6);
+var _Validators = __webpack_require__(7);
 
 var _CalendarSelector = __webpack_require__(12);
 
@@ -710,7 +710,7 @@ var _normalizeRecurringSelections = __webpack_require__(26);
 
 var _normalizeRecurringSelections2 = _interopRequireDefault(_normalizeRecurringSelections);
 
-var _AvailableTimes = __webpack_require__(37);
+var _AvailableTimes = __webpack_require__(38);
 
 var _AvailableTimes2 = _interopRequireDefault(_AvailableTimes);
 
@@ -1002,7 +1002,8 @@ var AvailableTimes = function (_PureComponent) {
           scrollbarProps_style = _props4.scrollbarProps_style,
           scrollbarProps_renderView = _props4.scrollbarProps_renderView,
           scrollbarProps_renderTrackVertical = _props4.scrollbarProps_renderTrackVertical,
-          scrollbarProps_renderThumbVertical = _props4.scrollbarProps_renderThumbVertical;
+          scrollbarProps_renderThumbVertical = _props4.scrollbarProps_renderThumbVertical,
+          appointmentMode = _props4.appointmentMode;
       var _state = this.state,
           availableWidth = _state.availableWidth,
           currentWeekIndex = _state.currentWeekIndex,
@@ -1103,7 +1104,8 @@ var AvailableTimes = function (_PureComponent) {
                   scrollbarProps_style: scrollbarProps_style,
                   scrollbarProps_renderView: scrollbarProps_renderView,
                   scrollbarProps_renderTrackVertical: scrollbarProps_renderTrackVertical,
-                  scrollbarProps_renderThumbVertical: scrollbarProps_renderThumbVertical
+                  scrollbarProps_renderThumbVertical: scrollbarProps_renderThumbVertical,
+                  appointmentMode: appointmentMode
                 });
               })
             )
@@ -1184,7 +1186,7 @@ var _react = __webpack_require__(5);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _CalendarSelector = __webpack_require__(38);
+var _CalendarSelector = __webpack_require__(39);
 
 var _CalendarSelector2 = _interopRequireDefault(_CalendarSelector);
 
@@ -1375,25 +1377,29 @@ var _TimeSlot = __webpack_require__(18);
 
 var _TimeSlot2 = _interopRequireDefault(_TimeSlot);
 
-var _hasOverlap = __webpack_require__(7);
+var _hasOverlap = __webpack_require__(8);
 
 var _hasOverlap2 = _interopRequireDefault(_hasOverlap);
 
-var _inSameDay = __webpack_require__(8);
+var _inSameDay = __webpack_require__(9);
 
 var _inSameDay2 = _interopRequireDefault(_inSameDay);
 
-var _positionInDay = __webpack_require__(9);
+var _positionInDay = __webpack_require__(6);
 
 var _positionInDay2 = _interopRequireDefault(_positionInDay);
 
-var _Day = __webpack_require__(39);
+var _Day = __webpack_require__(40);
 
 var _Day2 = _interopRequireDefault(_Day);
 
 var _toDate = __webpack_require__(27);
 
 var _toDate2 = _interopRequireDefault(_toDate);
+
+var _underlyingEvent = __webpack_require__(28);
+
+var _underlyingEvent2 = _interopRequireDefault(_underlyingEvent);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1545,7 +1551,9 @@ var Day = function (_PureComponent) {
   }, {
     key: 'handleMouseDown',
     value: function handleMouseDown(e) {
-      var timeZone = this.props.timeZone;
+      var _props2 = this.props,
+          timeZone = _props2.timeZone,
+          appointmentMode = _props2.appointmentMode;
 
       var position = this.relativeY(e.pageY, 60);
       var dateAtPosition = (0, _toDate2.default)(this.props.date, position, timeZone);
@@ -1559,6 +1567,12 @@ var Day = function (_PureComponent) {
       if (end - dateAtPosition < 1800000) {
         // slot is less than 30 mins
         return;
+      }
+
+      if (appointmentMode) {
+        if (!(0, _underlyingEvent2.default)(this.props.date, position, this.props.events, this.props.timeZone)) {
+          return;
+        }
       }
       this.setState(function (_ref7) {
         var selections = _ref7.selections;
@@ -1604,11 +1618,20 @@ var Day = function (_PureComponent) {
       if (typeof this.state.index === 'undefined') {
         return;
       }
-      var _props2 = this.props,
-          date = _props2.date,
-          timeZone = _props2.timeZone;
+
+      var _props3 = this.props,
+          date = _props3.date,
+          timeZone = _props3.timeZone,
+          appointmentMode = _props3.appointmentMode;
 
       var position = this.relativeY(pageY);
+
+      if (appointmentMode) {
+        if (!(0, _underlyingEvent2.default)(this.props.date, position, this.props.events, this.props.timeZone)) {
+          return;
+        }
+      }
+
       this.setState(function (_ref11) {
         var minLengthInMinutes = _ref11.minLengthInMinutes,
             selections = _ref11.selections,
@@ -1624,9 +1647,11 @@ var Day = function (_PureComponent) {
           var diff = (0, _toDate2.default)(date, position, timeZone).getTime() - (0, _toDate2.default)(date, lastKnownPosition, timeZone).getTime();
           var newStart = new Date(selection.start.getTime() + diff);
           var newEnd = new Date(selection.end.getTime() + diff);
+
           if ((0, _hasOverlap2.default)(selections, newStart, newEnd, index)) {
             return {};
           }
+
           if (_this3.hasReachedTop(target) && diff < 0) {
             // if has reached top blocker and it is going upwards, fix the newStart.
             newStart = selection.start;
@@ -1635,6 +1660,17 @@ var Day = function (_PureComponent) {
           if (_this3.hasReachedBottom(target) && diff > 0) {
             // if has reached bottom blocker and it is going downwards, fix.
             newEnd = selection.end;
+          }
+          if (appointmentMode) {
+            var newStartInPixels = (0, _positionInDay2.default)(_this3.props.date, newStart, _this3.props.timeZone);
+            if (!(0, _underlyingEvent2.default)(_this3.props.date, newStartInPixels, _this3.props.events, _this3.props.timeZone)) {
+              return {};
+            }
+
+            var newEndInPixels = (0, _positionInDay2.default)(_this3.props.date, newEnd, _this3.props.timeZone);
+            if (!(0, _underlyingEvent2.default)(_this3.props.date, newEndInPixels, _this3.props.events, _this3.props.timeZone)) {
+              return {};
+            }
           }
 
           selection.start = newStart;
@@ -1648,6 +1684,7 @@ var Day = function (_PureComponent) {
             newMinLength = 30;
           }
           var _newEnd = (0, _toDate2.default)(date, Math.max(minPos, position), timeZone);
+
           if ((0, _hasOverlap2.default)(selections, selection.start, _newEnd, index)) {
             // Collision! Let
             return {};
@@ -1680,15 +1717,15 @@ var Day = function (_PureComponent) {
     value: function render() {
       var _this4 = this;
 
-      var _props3 = this.props,
-          available = _props3.available,
-          availableWidth = _props3.availableWidth,
-          date = _props3.date,
-          events = _props3.events,
-          timeConvention = _props3.timeConvention,
-          timeZone = _props3.timeZone,
-          touchToDeleteSelection = _props3.touchToDeleteSelection,
-          hourLimits = _props3.hourLimits;
+      var _props4 = this.props,
+          available = _props4.available,
+          availableWidth = _props4.availableWidth,
+          date = _props4.date,
+          events = _props4.events,
+          timeConvention = _props4.timeConvention,
+          timeZone = _props4.timeZone,
+          touchToDeleteSelection = _props4.touchToDeleteSelection,
+          hourLimits = _props4.hourLimits;
       var _state = this.state,
           selections = _state.selections,
           index = _state.index;
@@ -1841,7 +1878,7 @@ var _react = __webpack_require__(5);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _DayHeader = __webpack_require__(40);
+var _DayHeader = __webpack_require__(41);
 
 var _DayHeader2 = _interopRequireDefault(_DayHeader);
 
@@ -2136,7 +2173,7 @@ var _hours = __webpack_require__(23);
 
 var _hours2 = _interopRequireDefault(_hours);
 
-var _Ruler = __webpack_require__(41);
+var _Ruler = __webpack_require__(42);
 
 var _Ruler2 = _interopRequireDefault(_Ruler);
 
@@ -2194,7 +2231,7 @@ var _react = __webpack_require__(5);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _Slider = __webpack_require__(42);
+var _Slider = __webpack_require__(43);
 
 var _Slider2 = _interopRequireDefault(_Slider);
 
@@ -2383,11 +2420,11 @@ var _momentTimezone2 = _interopRequireDefault(_momentTimezone);
 
 var _Constants = __webpack_require__(1);
 
-var _positionInDay = __webpack_require__(9);
+var _positionInDay = __webpack_require__(6);
 
 var _positionInDay2 = _interopRequireDefault(_positionInDay);
 
-var _TimeSlot = __webpack_require__(43);
+var _TimeSlot = __webpack_require__(44);
 
 var _TimeSlot2 = _interopRequireDefault(_TimeSlot);
 
@@ -2638,11 +2675,11 @@ var _momentTimezone = __webpack_require__(0);
 
 var _momentTimezone2 = _interopRequireDefault(_momentTimezone);
 
-var _reactCustomScrollbars = __webpack_require__(46);
+var _reactCustomScrollbars = __webpack_require__(47);
 
 var _Constants = __webpack_require__(1);
 
-var _Validators = __webpack_require__(6);
+var _Validators = __webpack_require__(7);
 
 var _Day = __webpack_require__(13);
 
@@ -2660,7 +2697,7 @@ var _getIncludedEvents = __webpack_require__(22);
 
 var _getIncludedEvents2 = _interopRequireDefault(_getIncludedEvents);
 
-var _Week = __webpack_require__(44);
+var _Week = __webpack_require__(45);
 
 var _Week2 = _interopRequireDefault(_Week);
 
@@ -2837,7 +2874,8 @@ var Week = function (_PureComponent) {
           timeZone = _props.timeZone,
           recurring = _props.recurring,
           touchToDeleteSelection = _props.touchToDeleteSelection,
-          availableDays = _props.availableDays;
+          availableDays = _props.availableDays,
+          appointmentMode = _props.appointmentMode;
       var _state = this.state,
           dayEvents = _state.dayEvents,
           daySelections = _state.daySelections,
@@ -2926,7 +2964,8 @@ var Week = function (_PureComponent) {
                   initialSelections: daySelections[i],
                   onChange: _this3.handleDayChange,
                   hourLimits: _this3.generateHourLimits(),
-                  touchToDeleteSelection: touchToDeleteSelection
+                  touchToDeleteSelection: touchToDeleteSelection,
+                  appointmentMode: appointmentMode
                 });
               })
             )
@@ -3021,7 +3060,7 @@ var _momentTimezone = __webpack_require__(0);
 
 var _momentTimezone2 = _interopRequireDefault(_momentTimezone);
 
-var _hasOverlap = __webpack_require__(7);
+var _hasOverlap = __webpack_require__(8);
 
 var _hasOverlap2 = _interopRequireDefault(_hasOverlap);
 
@@ -3167,7 +3206,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = hours;
 
-var _moment = __webpack_require__(45);
+var _moment = __webpack_require__(46);
 
 var _moment2 = _interopRequireDefault(_moment);
 
@@ -3349,6 +3388,46 @@ module.exports = exports['default'];
 /* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = underlyingEvent;
+
+var _positionInDay = __webpack_require__(6);
+
+var _positionInDay2 = _interopRequireDefault(_positionInDay);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function underlyingEvent(date, position, events, timeZone) {
+  // check if underlying event
+  var today = new Date(date);
+  today.setHours(0);
+  today.setMinutes(0);
+  today.setSeconds(1);
+
+  var hasEvent = events.find(function (ev, index) {
+    var positionStart = (0, _positionInDay2.default)(today, ev.start, timeZone);
+    var positionEnd = (0, _positionInDay2.default)(today, ev.end, timeZone);
+
+    if (!(position >= positionStart && position < positionEnd) || ev.allDay) {
+      return false;
+    } else {
+      return true;
+    }
+  });
+
+  return hasEvent;
+}
+module.exports = exports['default'];
+
+/***/ }),
+/* 29 */
+/***/ (function(module, exports, __webpack_require__) {
+
 exports = module.exports = __webpack_require__(2)(false);
 // imports
 
@@ -3371,7 +3450,7 @@ exports.locals = {
 };
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(2)(false);
@@ -3395,7 +3474,7 @@ exports.locals = {
 };
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(2)(false);
@@ -3415,7 +3494,7 @@ exports.locals = {
 };
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(2)(false);
@@ -3435,7 +3514,7 @@ exports.locals = {
 };
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(2)(false);
@@ -3453,7 +3532,7 @@ exports.locals = {
 };
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(2)(false);
@@ -3470,7 +3549,7 @@ exports.locals = {
 };
 
 /***/ }),
-/* 34 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(2)(false);
@@ -3491,7 +3570,7 @@ exports.locals = {
 };
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(2)(false);
@@ -3513,7 +3592,7 @@ exports.locals = {
 };
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, exports) {
 
 
@@ -3608,32 +3687,6 @@ module.exports = function (css) {
 
 
 /***/ }),
-/* 37 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(28);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// add the styles to the DOM
-var update = __webpack_require__(3)(content, {});
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../node_modules/css-loader/index.js??ref--1-1!../node_modules/postcss-loader/index.js??ref--1-2!./AvailableTimes.css", function() {
-			var newContent = require("!!../node_modules/css-loader/index.js??ref--1-1!../node_modules/postcss-loader/index.js??ref--1-2!./AvailableTimes.css");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
 /* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -3649,8 +3702,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../node_modules/css-loader/index.js??ref--1-1!../node_modules/postcss-loader/index.js??ref--1-2!./CalendarSelector.css", function() {
-			var newContent = require("!!../node_modules/css-loader/index.js??ref--1-1!../node_modules/postcss-loader/index.js??ref--1-2!./CalendarSelector.css");
+		module.hot.accept("!!../node_modules/css-loader/index.js??ref--1-1!../node_modules/postcss-loader/index.js??ref--1-2!./AvailableTimes.css", function() {
+			var newContent = require("!!../node_modules/css-loader/index.js??ref--1-1!../node_modules/postcss-loader/index.js??ref--1-2!./AvailableTimes.css");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -3675,8 +3728,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../node_modules/css-loader/index.js??ref--1-1!../node_modules/postcss-loader/index.js??ref--1-2!./Day.css", function() {
-			var newContent = require("!!../node_modules/css-loader/index.js??ref--1-1!../node_modules/postcss-loader/index.js??ref--1-2!./Day.css");
+		module.hot.accept("!!../node_modules/css-loader/index.js??ref--1-1!../node_modules/postcss-loader/index.js??ref--1-2!./CalendarSelector.css", function() {
+			var newContent = require("!!../node_modules/css-loader/index.js??ref--1-1!../node_modules/postcss-loader/index.js??ref--1-2!./CalendarSelector.css");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -3701,8 +3754,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../node_modules/css-loader/index.js??ref--1-1!../node_modules/postcss-loader/index.js??ref--1-2!./DayHeader.css", function() {
-			var newContent = require("!!../node_modules/css-loader/index.js??ref--1-1!../node_modules/postcss-loader/index.js??ref--1-2!./DayHeader.css");
+		module.hot.accept("!!../node_modules/css-loader/index.js??ref--1-1!../node_modules/postcss-loader/index.js??ref--1-2!./Day.css", function() {
+			var newContent = require("!!../node_modules/css-loader/index.js??ref--1-1!../node_modules/postcss-loader/index.js??ref--1-2!./Day.css");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -3727,8 +3780,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../node_modules/css-loader/index.js??ref--1-1!../node_modules/postcss-loader/index.js??ref--1-2!./Ruler.css", function() {
-			var newContent = require("!!../node_modules/css-loader/index.js??ref--1-1!../node_modules/postcss-loader/index.js??ref--1-2!./Ruler.css");
+		module.hot.accept("!!../node_modules/css-loader/index.js??ref--1-1!../node_modules/postcss-loader/index.js??ref--1-2!./DayHeader.css", function() {
+			var newContent = require("!!../node_modules/css-loader/index.js??ref--1-1!../node_modules/postcss-loader/index.js??ref--1-2!./DayHeader.css");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -3753,8 +3806,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../node_modules/css-loader/index.js??ref--1-1!../node_modules/postcss-loader/index.js??ref--1-2!./Slider.css", function() {
-			var newContent = require("!!../node_modules/css-loader/index.js??ref--1-1!../node_modules/postcss-loader/index.js??ref--1-2!./Slider.css");
+		module.hot.accept("!!../node_modules/css-loader/index.js??ref--1-1!../node_modules/postcss-loader/index.js??ref--1-2!./Ruler.css", function() {
+			var newContent = require("!!../node_modules/css-loader/index.js??ref--1-1!../node_modules/postcss-loader/index.js??ref--1-2!./Ruler.css");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -3779,8 +3832,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../node_modules/css-loader/index.js??ref--1-1!../node_modules/postcss-loader/index.js??ref--1-2!./TimeSlot.css", function() {
-			var newContent = require("!!../node_modules/css-loader/index.js??ref--1-1!../node_modules/postcss-loader/index.js??ref--1-2!./TimeSlot.css");
+		module.hot.accept("!!../node_modules/css-loader/index.js??ref--1-1!../node_modules/postcss-loader/index.js??ref--1-2!./Slider.css", function() {
+			var newContent = require("!!../node_modules/css-loader/index.js??ref--1-1!../node_modules/postcss-loader/index.js??ref--1-2!./Slider.css");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -3805,6 +3858,32 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
+		module.hot.accept("!!../node_modules/css-loader/index.js??ref--1-1!../node_modules/postcss-loader/index.js??ref--1-2!./TimeSlot.css", function() {
+			var newContent = require("!!../node_modules/css-loader/index.js??ref--1-1!../node_modules/postcss-loader/index.js??ref--1-2!./TimeSlot.css");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 45 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(36);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(3)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
 		module.hot.accept("!!../node_modules/css-loader/index.js??ref--1-1!../node_modules/postcss-loader/index.js??ref--1-2!./Week.css", function() {
 			var newContent = require("!!../node_modules/css-loader/index.js??ref--1-1!../node_modules/postcss-loader/index.js??ref--1-2!./Week.css");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
@@ -3816,13 +3895,13 @@ if(false) {
 }
 
 /***/ }),
-/* 45 */
+/* 46 */
 /***/ (function(module, exports) {
 
 module.exports = require("moment");
 
 /***/ }),
-/* 46 */
+/* 47 */
 /***/ (function(module, exports) {
 
 module.exports = require("react-custom-scrollbars");
