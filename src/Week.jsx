@@ -72,6 +72,10 @@ export default class Week extends PureComponent {
     });
   }
 
+  componentDidMount() {
+    this.refs.scrollbars.scrollTop(350);
+  }
+
   componentWillReceiveProps({ week, events, timeZone }) {
     if (events === this.props.events) {
       // nothing changed
@@ -184,6 +188,7 @@ export default class Week extends PureComponent {
             renderView = {this.props.scrollbarProps_renderView}
             renderTrackVertical = {this.props.scrollbarProps_renderTrackVertical}
             renderThumbVertical = {this.props.scrollbarProps_renderThumbVertical}
+            ref="scrollbars"
         >
             <div
                 className={styles.daysWrapper}
