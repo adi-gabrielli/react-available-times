@@ -2783,6 +2783,11 @@ var Week = function (_PureComponent) {
       });
     }
   }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      this.refs.scrollbars.scrollTop(350);
+    }
+  }, {
     key: 'componentWillReceiveProps',
     value: function componentWillReceiveProps(_ref3) {
       var week = _ref3.week,
@@ -2924,7 +2929,8 @@ var Week = function (_PureComponent) {
             style: this.props.scrollbarProps_style,
             renderView: this.props.scrollbarProps_renderView,
             renderTrackVertical: this.props.scrollbarProps_renderTrackVertical,
-            renderThumbVertical: this.props.scrollbarProps_renderThumbVertical
+            renderThumbVertical: this.props.scrollbarProps_renderThumbVertical,
+            ref: 'scrollbars'
           },
           _react2.default.createElement(
             'div',
