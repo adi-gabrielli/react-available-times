@@ -48,10 +48,6 @@ export default class AvailableTimes extends PureComponent {
     recurring,
     timeZone,
     weekStartsOn,
-    scrollbarProps_style,
-    scrollbarProps_renderView,
-    scrollbarProps_renderTrackVertical,
-    scrollbarProps_renderThumbVertical
   }) {
     super();
     const selectedCalendars =
@@ -228,7 +224,8 @@ export default class AvailableTimes extends PureComponent {
       scrollbarProps_renderView,
       scrollbarProps_renderTrackVertical,
       scrollbarProps_renderThumbVertical,
-      appointmentMode
+      appointmentMode,
+      startTime
     } = this.props;
 
     const {
@@ -297,7 +294,7 @@ export default class AvailableTimes extends PureComponent {
                 >
                 {weeks.map((week, i) => {
                     if ((recurring || Math.abs(i - currentWeekIndex) > 1) && i !== 0) {
-                    return <span key={week.start} />;
+                        return <span key={week.start} />;
                     }
                     return (
                             <Week
@@ -320,6 +317,7 @@ export default class AvailableTimes extends PureComponent {
                                 scrollbarProps_renderTrackVertical={scrollbarProps_renderTrackVertical}
                                 scrollbarProps_renderThumbVertical={scrollbarProps_renderThumbVertical}
                                 appointmentMode={appointmentMode}
+                                startTime={startTime}
                             />
                     );
                 })}
@@ -368,6 +366,7 @@ AvailableTimes.propTypes = {
     start: PropTypes.number,
     end: PropTypes.number,
   }).isRequired,
+  startTime: PropTypes.number,
 };
 
 AvailableTimes.defaultProps = {
@@ -376,4 +375,5 @@ AvailableTimes.defaultProps = {
   touchToDeleteSelection: 'ontouchstart' in window,
   availableDays: DAYS_IN_WEEK,
   availableHourRange: { start: 0, end: 24 },
+  startTime: 0,
 };

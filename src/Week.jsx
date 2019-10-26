@@ -73,7 +73,7 @@ export default class Week extends PureComponent {
   }
 
   componentDidMount() {
-    this.refs.scrollbars.scrollTop(350);
+    this.refs.scrollbars.scrollTop(HOUR_IN_PIXELS * this.props.startTime);
   }
 
   componentWillReceiveProps({ week, events, timeZone }) {
@@ -149,7 +149,8 @@ export default class Week extends PureComponent {
       recurring,
       touchToDeleteSelection,
       availableDays,
-      appointmentMode
+      appointmentMode,
+      startTime
     } = this.props;
     const { dayEvents, daySelections, daysWidth, widthOfAScrollbar } = this.state;
 
@@ -261,4 +262,6 @@ Week.propTypes = {
     start: PropTypes.number,
     end: PropTypes.number,
   }).isRequired,
+  appointmentMode: PropTypes.bool,
+  startTime: PropTypes.number,
 };

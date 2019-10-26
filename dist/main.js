@@ -766,11 +766,7 @@ var AvailableTimes = function (_PureComponent) {
         initialSelections = _ref$initialSelection === undefined ? [] : _ref$initialSelection,
         recurring = _ref.recurring,
         timeZone = _ref.timeZone,
-        weekStartsOn = _ref.weekStartsOn,
-        scrollbarProps_style = _ref.scrollbarProps_style,
-        scrollbarProps_renderView = _ref.scrollbarProps_renderView,
-        scrollbarProps_renderTrackVertical = _ref.scrollbarProps_renderTrackVertical,
-        scrollbarProps_renderThumbVertical = _ref.scrollbarProps_renderThumbVertical;
+        weekStartsOn = _ref.weekStartsOn;
 
     _classCallCheck(this, AvailableTimes);
 
@@ -1003,7 +999,8 @@ var AvailableTimes = function (_PureComponent) {
           scrollbarProps_renderView = _props4.scrollbarProps_renderView,
           scrollbarProps_renderTrackVertical = _props4.scrollbarProps_renderTrackVertical,
           scrollbarProps_renderThumbVertical = _props4.scrollbarProps_renderThumbVertical,
-          appointmentMode = _props4.appointmentMode;
+          appointmentMode = _props4.appointmentMode,
+          startTime = _props4.startTime;
       var _state = this.state,
           availableWidth = _state.availableWidth,
           currentWeekIndex = _state.currentWeekIndex,
@@ -1105,7 +1102,8 @@ var AvailableTimes = function (_PureComponent) {
                   scrollbarProps_renderView: scrollbarProps_renderView,
                   scrollbarProps_renderTrackVertical: scrollbarProps_renderTrackVertical,
                   scrollbarProps_renderThumbVertical: scrollbarProps_renderThumbVertical,
-                  appointmentMode: appointmentMode
+                  appointmentMode: appointmentMode,
+                  startTime: startTime
                 });
               })
             )
@@ -1153,7 +1151,8 @@ AvailableTimes.propTypes = {
   availableHourRange: _propTypes2.default.shape({
     start: _propTypes2.default.number,
     end: _propTypes2.default.number
-  }).isRequired
+  }).isRequired,
+  startTime: _propTypes2.default.number
 };
 
 AvailableTimes.defaultProps = {
@@ -1161,7 +1160,8 @@ AvailableTimes.defaultProps = {
   weekStartsOn: 'sunday',
   touchToDeleteSelection: 'ontouchstart' in window,
   availableDays: _Constants.DAYS_IN_WEEK,
-  availableHourRange: { start: 0, end: 24 }
+  availableHourRange: { start: 0, end: 24 },
+  startTime: 0
 };
 module.exports = exports['default'];
 
@@ -2785,7 +2785,7 @@ var Week = function (_PureComponent) {
   }, {
     key: 'componentDidMount',
     value: function componentDidMount() {
-      this.refs.scrollbars.scrollTop(350);
+      this.refs.scrollbars.scrollTop(_Constants.HOUR_IN_PIXELS * this.props.startTime);
     }
   }, {
     key: 'componentWillReceiveProps',
@@ -2880,7 +2880,8 @@ var Week = function (_PureComponent) {
           recurring = _props.recurring,
           touchToDeleteSelection = _props.touchToDeleteSelection,
           availableDays = _props.availableDays,
-          appointmentMode = _props.appointmentMode;
+          appointmentMode = _props.appointmentMode,
+          startTime = _props.startTime;
       var _state = this.state,
           dayEvents = _state.dayEvents,
           daySelections = _state.daySelections,
@@ -3013,7 +3014,9 @@ Week.propTypes = {
   availableHourRange: _propTypes2.default.shape({
     start: _propTypes2.default.number,
     end: _propTypes2.default.number
-  }).isRequired
+  }).isRequired,
+  appointmentMode: _propTypes2.default.bool,
+  startTime: _propTypes2.default.number
 };
 module.exports = exports['default'];
 
