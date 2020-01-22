@@ -1561,14 +1561,16 @@ var Day = function (_PureComponent) {
       if (this.findSelectionAt(dateAtPosition)) {
         return;
       }
-
       var end = (0, _toDate2.default)(this.props.date, position + _Constants.HOUR_IN_PIXELS, timeZone);
       end = (0, _hasOverlap2.default)(this.state.selections, dateAtPosition, end) || end;
       if (end - dateAtPosition < 1800000) {
         // slot is less than 30 mins
         return;
       }
-
+      var now = new Date();
+      if (now.getTime() > dateAtPosition.getTime()) {
+        return;
+      }
       if (appointmentMode) {
         if (!(0, _underlyingEvent2.default)(this.props.date, position, this.props.events, this.props.timeZone)) {
           return;
@@ -1625,6 +1627,13 @@ var Day = function (_PureComponent) {
           appointmentMode = _props3.appointmentMode;
 
       var position = this.relativeY(pageY);
+
+      var dateAtPosition = (0, _toDate2.default)(this.props.date, position, timeZone);
+
+      var now = new Date();
+      if (now.getTime() > dateAtPosition.getTime()) {
+        return;
+      }
 
       if (appointmentMode) {
         if (!(0, _underlyingEvent2.default)(this.props.date, position, this.props.events, this.props.timeZone)) {
