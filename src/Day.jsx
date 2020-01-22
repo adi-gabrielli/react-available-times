@@ -125,14 +125,16 @@ export default class Day extends PureComponent {
     if (this.findSelectionAt(dateAtPosition)) {
       return;
     }
-
     let end = toDate(this.props.date, position + HOUR_IN_PIXELS, timeZone);
     end = hasOverlap(this.state.selections, dateAtPosition, end) || end;
     if (end - dateAtPosition < 1800000) {
       // slot is less than 30 mins
       return;
     }
-
+    const now = new Date();
+    if (now.getTime() > dateAtPosition.getTime()){
+        return;
+    }
     if (appointmentMode) {
       if (!underlyingEvent(this.props.date, position, this.props.events, this.props.timeZone)) {
         return;
@@ -167,6 +169,13 @@ export default class Day extends PureComponent {
 
     const { date, timeZone, appointmentMode } = this.props;
     const position = this.relativeY(pageY);
+
+    const dateAtPosition = toDate(this.props.date, position, timeZone);
+
+    const now = new Date();
+    if (now.getTime() > dateAtPosition.getTime()){
+        return;
+    }
 
     if (appointmentMode) {
       if (!underlyingEvent(this.props.date, position, this.props.events, this.props.timeZone)) {
