@@ -1434,6 +1434,7 @@ var Day = function (_PureComponent) {
     _this.handleSizeChangeStart = _this.handleItemModification.bind(_this, 'end');
     _this.handleMoveStart = _this.handleItemModification.bind(_this, 'both');
     _this.handleDelete = _this.handleDelete.bind(_this);
+    _this.hasAppointment = _this.hasAppointment.bind(_this);
     _this.handleMouseTargetRef = function (element) {
       _this.mouseTargetRef = element;
     };
@@ -1441,6 +1442,13 @@ var Day = function (_PureComponent) {
   }
 
   _createClass(Day, [{
+    key: 'hasAppointment',
+    value: function hasAppointment() {
+      return this.props.daySelections.some(function (daySelection) {
+        return daySelection.length > 0;
+      });
+    }
+  }, {
     key: 'findSelectionAt',
     value: function findSelectionAt(date) {
       var selections = this.state.selections;
@@ -1572,7 +1580,7 @@ var Day = function (_PureComponent) {
         return;
       }
       if (appointmentMode) {
-        if (!(0, _underlyingEvent2.default)(this.props.date, position, this.props.events, this.props.timeZone)) {
+        if (!(0, _underlyingEvent2.default)(this.props.date, position, this.props.events, this.props.timeZone) || this.hasAppointment()) {
           return;
         }
       }
@@ -2981,7 +2989,8 @@ var Week = function (_PureComponent) {
                   onChange: _this3.handleDayChange,
                   hourLimits: _this3.generateHourLimits(),
                   touchToDeleteSelection: touchToDeleteSelection,
-                  appointmentMode: appointmentMode
+                  appointmentMode: appointmentMode,
+                  daySelections: _this3.state.daySelections
                 });
               })
             )

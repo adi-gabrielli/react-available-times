@@ -225,6 +225,7 @@ export default class Week extends PureComponent {
                         hourLimits={this.generateHourLimits()}
                         touchToDeleteSelection={touchToDeleteSelection}
                         appointmentMode={appointmentMode}
+                        daySelections={this.state.daySelections}
                     />
                     ))}
                 </div>

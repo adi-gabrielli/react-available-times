@@ -29,9 +29,14 @@ export default class Day extends PureComponent {
     this.handleSizeChangeStart = this.handleItemModification.bind(this, 'end');
     this.handleMoveStart = this.handleItemModification.bind(this, 'both');
     this.handleDelete = this.handleDelete.bind(this);
+    this.hasAppointment = this.hasAppointment.bind(this);
     this.handleMouseTargetRef = (element) => {
       this.mouseTargetRef = element;
     };
+  }
+
+  hasAppointment(){
+    return this.props.daySelections.some( (daySelection) => daySelection.length > 0)
   }
 
   findSelectionAt(date) {
@@ -132,11 +137,11 @@ export default class Day extends PureComponent {
       return;
     }
     const now = new Date();
-    if (now.getTime() > dateAtPosition.getTime()){
+    if (now.getTime() > dateAtPosition.getTime()) {
         return;
     }
     if (appointmentMode) {
-      if (!underlyingEvent(this.props.date, position, this.props.events, this.props.timeZone)) {
+      if (!underlyingEvent(this.props.date, position, this.props.events, this.props.timeZone) || (this.hasAppointment())) {
         return;
       }
     }
