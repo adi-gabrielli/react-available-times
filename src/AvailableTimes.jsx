@@ -225,7 +225,8 @@ export default class AvailableTimes extends PureComponent {
       scrollbarProps_renderTrackVertical,
       scrollbarProps_renderThumbVertical,
       appointmentMode,
-      startTime
+      startTime,
+      reservationMode
     } = this.props;
 
     const {
@@ -318,6 +319,7 @@ export default class AvailableTimes extends PureComponent {
                                 scrollbarProps_renderThumbVertical={scrollbarProps_renderThumbVertical}
                                 appointmentMode={appointmentMode}
                                 startTime={startTime}
+                                reservationMode={reservationMode}
                             />
                     );
                 })}
@@ -367,6 +369,8 @@ AvailableTimes.propTypes = {
     end: PropTypes.number,
   }).isRequired,
   startTime: PropTypes.number,
+  appointmentMode: PropTypes.bool,
+  reservationMode: PropTypes.bool,
 };
 
 AvailableTimes.defaultProps = {
@@ -376,4 +380,6 @@ AvailableTimes.defaultProps = {
   availableDays: DAYS_IN_WEEK,
   availableHourRange: { start: 0, end: 24 },
   startTime: 0,
+  appointmentMode: false,
+  reservationMode: false,
 };

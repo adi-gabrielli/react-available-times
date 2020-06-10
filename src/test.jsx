@@ -163,6 +163,7 @@ class Test extends Component {
               scrollbarProps_renderTrackVertical={props => <div {...props} className="scroll-track-vertical"/>}
               scrollbarProps_renderThumbVertical={props => <div {...props} className="scroll-thumb-vertical"/>}
               appointmentMode={true}
+              reservationMode={false}
               startTime={6}
             />
           </div>

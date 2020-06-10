@@ -35,8 +35,8 @@ export default class Day extends PureComponent {
     };
   }
 
-  hasAppointment(){
-    return this.props.daySelections.some( (daySelection) => daySelection.length > 0)
+  hasAppointment() {
+    return this.props.daySelections.some((daySelection) => daySelection.length > 0)
   }
 
   findSelectionAt(date) {
@@ -123,7 +123,7 @@ export default class Day extends PureComponent {
   }
 
   handleMouseDown(e) {
-    const { timeZone, appointmentMode } = this.props;
+    const { timeZone, appointmentMode, reservationMode } = this.props;
     const position = this.relativeY(e.pageY, 60);
     const dateAtPosition = toDate(this.props.date, position, timeZone);
 
@@ -141,10 +141,17 @@ export default class Day extends PureComponent {
         return;
     }
     if (appointmentMode) {
-      if (!underlyingEvent(this.props.date, position, this.props.events, this.props.timeZone) || (this.hasAppointment())) {
+      if (!underlyingEvent(this.props.date, position, this.props.events, this.props.timeZone, 'appointment')) {
         return;
       }
     }
+
+    if (reservationMode) {
+        if (underlyingEvent(this.props.date, position, this.props.events, this.props.timeZone, 'reservation')) {
+            return;
+        }
+    }
+
     this.setState(({ selections }) => ({
       edge: 'end',
       index: selections.length,
@@ -172,20 +179,26 @@ export default class Day extends PureComponent {
       return;
     }
 
-    const { date, timeZone, appointmentMode } = this.props;
+    const { date, timeZone, appointmentMode, reservationMode } = this.props;
     const position = this.relativeY(pageY);
 
     const dateAtPosition = toDate(this.props.date, position, timeZone);
 
     const now = new Date();
-    if (now.getTime() > dateAtPosition.getTime()){
+    if (now.getTime() > dateAtPosition.getTime()) {
         return;
     }
 
     if (appointmentMode) {
-      if (!underlyingEvent(this.props.date, position, this.props.events, this.props.timeZone)) {
+      if (!underlyingEvent(this.props.date, position, this.props.events, this.props.timeZone, 'appointment')) {
         return;
       }
+    }
+
+    if (reservationMode) {
+        if (underlyingEvent(this.props.date, position, this.props.events, this.props.timeZone, 'reservation')) {
+          return;
+        }
     }
 
     this.setState(({ minLengthInMinutes, selections, edge, index, lastKnownPosition, target }) => {
@@ -213,12 +226,12 @@ export default class Day extends PureComponent {
         }
         if (appointmentMode) {
           const newStartInPixels = positionInDay(this.props.date, newStart, this.props.timeZone);
-          if (!underlyingEvent(this.props.date, newStartInPixels, this.props.events, this.props.timeZone)) {
+          if (!underlyingEvent(this.props.date, newStartInPixels, this.props.events, this.props.timeZone, 'appointment')) {
             return {};
           }
 
           const newEndInPixels = positionInDay(this.props.date, newEnd, this.props.timeZone);
-          if (!underlyingEvent(this.props.date, newEndInPixels, this.props.events, this.props.timeZone)) {
+          if (!underlyingEvent(this.props.date, newEndInPixels, this.props.events, this.props.timeZone, 'appointment')) {
             return {};
           }
         }
@@ -394,5 +407,7 @@ Day.propTypes = {
   })),
   onChange: PropTypes.func.isRequired,
   touchToDeleteSelection: PropTypes.bool,
+  reservationMode: PropTypes.bool,
+  appointmentMode: PropTypes.bool,
 };
 

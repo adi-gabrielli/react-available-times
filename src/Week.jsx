@@ -150,6 +150,7 @@ export default class Week extends PureComponent {
       touchToDeleteSelection,
       availableDays,
       appointmentMode,
+      reservationMode,
       startTime
     } = this.props;
     const { dayEvents, daySelections, daysWidth, widthOfAScrollbar } = this.state;
@@ -226,6 +227,7 @@ export default class Week extends PureComponent {
                         touchToDeleteSelection={touchToDeleteSelection}
                         appointmentMode={appointmentMode}
                         daySelections={this.state.daySelections}
+                        reservationMode={reservationMode}
                     />
                     ))}
                 </div>
@@ -265,4 +267,5 @@ Week.propTypes = {
   }).isRequired,
   appointmentMode: PropTypes.bool,
   startTime: PropTypes.number,
+  reservationMode: PropTypes.bool
 };

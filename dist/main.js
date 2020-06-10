@@ -1000,7 +1000,8 @@ var AvailableTimes = function (_PureComponent) {
           scrollbarProps_renderTrackVertical = _props4.scrollbarProps_renderTrackVertical,
           scrollbarProps_renderThumbVertical = _props4.scrollbarProps_renderThumbVertical,
           appointmentMode = _props4.appointmentMode,
-          startTime = _props4.startTime;
+          startTime = _props4.startTime,
+          reservationMode = _props4.reservationMode;
       var _state = this.state,
           availableWidth = _state.availableWidth,
           currentWeekIndex = _state.currentWeekIndex,
@@ -1103,7 +1104,8 @@ var AvailableTimes = function (_PureComponent) {
                   scrollbarProps_renderTrackVertical: scrollbarProps_renderTrackVertical,
                   scrollbarProps_renderThumbVertical: scrollbarProps_renderThumbVertical,
                   appointmentMode: appointmentMode,
-                  startTime: startTime
+                  startTime: startTime,
+                  reservationMode: reservationMode
                 });
               })
             )
@@ -1152,7 +1154,9 @@ AvailableTimes.propTypes = {
     start: _propTypes2.default.number,
     end: _propTypes2.default.number
   }).isRequired,
-  startTime: _propTypes2.default.number
+  startTime: _propTypes2.default.number,
+  appointmentMode: _propTypes2.default.bool,
+  reservationMode: _propTypes2.default.bool
 };
 
 AvailableTimes.defaultProps = {
@@ -1161,7 +1165,9 @@ AvailableTimes.defaultProps = {
   touchToDeleteSelection: 'ontouchstart' in window,
   availableDays: _Constants.DAYS_IN_WEEK,
   availableHourRange: { start: 0, end: 24 },
-  startTime: 0
+  startTime: 0,
+  appointmentMode: false,
+  reservationMode: false
 };
 module.exports = exports['default'];
 
@@ -1561,7 +1567,8 @@ var Day = function (_PureComponent) {
     value: function handleMouseDown(e) {
       var _props2 = this.props,
           timeZone = _props2.timeZone,
-          appointmentMode = _props2.appointmentMode;
+          appointmentMode = _props2.appointmentMode,
+          reservationMode = _props2.reservationMode;
 
       var position = this.relativeY(e.pageY, 60);
       var dateAtPosition = (0, _toDate2.default)(this.props.date, position, timeZone);
@@ -1580,10 +1587,17 @@ var Day = function (_PureComponent) {
         return;
       }
       if (appointmentMode) {
-        if (!(0, _underlyingEvent2.default)(this.props.date, position, this.props.events, this.props.timeZone) || this.hasAppointment()) {
+        if (!(0, _underlyingEvent2.default)(this.props.date, position, this.props.events, this.props.timeZone, 'appointment')) {
           return;
         }
       }
+
+      if (reservationMode) {
+        if ((0, _underlyingEvent2.default)(this.props.date, position, this.props.events, this.props.timeZone, 'reservation')) {
+          return;
+        }
+      }
+
       this.setState(function (_ref7) {
         var selections = _ref7.selections;
         return {
@@ -1632,7 +1646,8 @@ var Day = function (_PureComponent) {
       var _props3 = this.props,
           date = _props3.date,
           timeZone = _props3.timeZone,
-          appointmentMode = _props3.appointmentMode;
+          appointmentMode = _props3.appointmentMode,
+          reservationMode = _props3.reservationMode;
 
       var position = this.relativeY(pageY);
 
@@ -1644,7 +1659,13 @@ var Day = function (_PureComponent) {
       }
 
       if (appointmentMode) {
-        if (!(0, _underlyingEvent2.default)(this.props.date, position, this.props.events, this.props.timeZone)) {
+        if (!(0, _underlyingEvent2.default)(this.props.date, position, this.props.events, this.props.timeZone, 'appointment')) {
+          return;
+        }
+      }
+
+      if (reservationMode) {
+        if ((0, _underlyingEvent2.default)(this.props.date, position, this.props.events, this.props.timeZone, 'reservation')) {
           return;
         }
       }
@@ -1680,12 +1701,12 @@ var Day = function (_PureComponent) {
           }
           if (appointmentMode) {
             var newStartInPixels = (0, _positionInDay2.default)(_this3.props.date, newStart, _this3.props.timeZone);
-            if (!(0, _underlyingEvent2.default)(_this3.props.date, newStartInPixels, _this3.props.events, _this3.props.timeZone)) {
+            if (!(0, _underlyingEvent2.default)(_this3.props.date, newStartInPixels, _this3.props.events, _this3.props.timeZone, 'appointment')) {
               return {};
             }
 
             var newEndInPixels = (0, _positionInDay2.default)(_this3.props.date, newEnd, _this3.props.timeZone);
-            if (!(0, _underlyingEvent2.default)(_this3.props.date, newEndInPixels, _this3.props.events, _this3.props.timeZone)) {
+            if (!(0, _underlyingEvent2.default)(_this3.props.date, newEndInPixels, _this3.props.events, _this3.props.timeZone, 'appointment')) {
               return {};
             }
           }
@@ -1870,7 +1891,9 @@ Day.propTypes = {
     offset: _propTypes2.default.number
   })),
   onChange: _propTypes2.default.func.isRequired,
-  touchToDeleteSelection: _propTypes2.default.bool
+  touchToDeleteSelection: _propTypes2.default.bool,
+  reservationMode: _propTypes2.default.bool,
+  appointmentMode: _propTypes2.default.bool
 };
 module.exports = exports['default'];
 
@@ -2898,6 +2921,7 @@ var Week = function (_PureComponent) {
           touchToDeleteSelection = _props.touchToDeleteSelection,
           availableDays = _props.availableDays,
           appointmentMode = _props.appointmentMode,
+          reservationMode = _props.reservationMode,
           startTime = _props.startTime;
       var _state = this.state,
           dayEvents = _state.dayEvents,
@@ -2990,7 +3014,8 @@ var Week = function (_PureComponent) {
                   hourLimits: _this3.generateHourLimits(),
                   touchToDeleteSelection: touchToDeleteSelection,
                   appointmentMode: appointmentMode,
-                  daySelections: _this3.state.daySelections
+                  daySelections: _this3.state.daySelections,
+                  reservationMode: reservationMode
                 });
               })
             )
@@ -3034,7 +3059,8 @@ Week.propTypes = {
     end: _propTypes2.default.number
   }).isRequired,
   appointmentMode: _propTypes2.default.bool,
-  startTime: _propTypes2.default.number
+  startTime: _propTypes2.default.number,
+  reservationMode: _propTypes2.default.bool
 };
 module.exports = exports['default'];
 
