@@ -1810,7 +1810,7 @@ var Day = function (_PureComponent) {
               offset = _ref12.offset;
           return !allDay && _react2.default.createElement(_TimeSlot2.default
           // eslint-disable-next-line react/no-array-index-key
-          , { key: i + title,
+          , { key: i,
             timeConvention: timeConvention,
             timeZone: timeZone,
             date: date,

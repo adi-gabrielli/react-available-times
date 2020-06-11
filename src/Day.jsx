@@ -330,7 +330,7 @@ export default class Day extends PureComponent {
         }, i) => !allDay && (
           <TimeSlot
             // eslint-disable-next-line react/no-array-index-key
-            key={i + title}
+            key={i}
             timeConvention={timeConvention}
             timeZone={timeZone}
             date={date}

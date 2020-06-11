@@ -164,7 +164,7 @@ class Test extends Component {
               scrollbarProps_renderThumbVertical={props => <div {...props} className="scroll-thumb-vertical"/>}
               appointmentMode={true}
               reservationMode={false}
-              startTime={6}
+              startTime={8}
             />
           </div>
         </div>
